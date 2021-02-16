@@ -2,9 +2,6 @@ import { Component, ElementRef, Inject, ViewChild, AfterViewInit } from '@angula
 import { ConferenceData } from '../../providers/conference-data';
 import { Platform } from '@ionic/angular';
 import { DOCUMENT} from '@angular/common';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-
-declare var google: any;
 
 import { darkStyle } from './map-dark-style';
 
@@ -15,9 +12,7 @@ import { darkStyle } from './map-dark-style';
 })
 export class MapPage implements AfterViewInit {
   @ViewChild('mapCanvas', { static: true }) mapElement: ElementRef;
-  lat;
-  lng;
-  map;
+
   constructor(
     @Inject(DOCUMENT) private doc: Document,
     public confData: ConferenceData,
@@ -66,7 +61,6 @@ export class MapPage implements AfterViewInit {
       googleMaps.event.addListenerOnce(map, 'idle', () => {
         mapEle.classList.add('show-map');
       });
-      this.map = map;
     });
 
     const observer = new MutationObserver((mutations) => {
@@ -85,40 +79,6 @@ export class MapPage implements AfterViewInit {
     observer.observe(appEl, {
       attributes: true
     });
-  }
-  startTracking(){
-    this.geolocation.watchPosition().subscribe((resp) => {
-      // alert("r succ"+resp.coords.latitude)
-
-      this.lat = resp.coords.latitude;
-      this.lng = resp.coords.longitude;
-      const latLng = new google.maps.LatLng(this.lng, this.lat);
-      const marker = new google.maps.Marker({
-        map: this.map,
-        icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-          new google.maps.Size(22, 22),
-          new google.maps.Point(0, 18),
-          new google.maps.Point(11, 11)),
-        position: latLng
-      });
-
-      const content = '<h4>You are here</h4>';
-      this.addInfoWindow(marker, content);
-    }, er => {
-      // alert("error getting location")
-      alert('Can not retrieve Location');
-    });
-  }
-  addInfoWindow(marker, content) {
-
-    const infoWindow = new google.maps.InfoWindow({
-      content
-    });
-
-    google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.open(this.map, marker);
-    });
-
   }
 }
 
@@ -144,5 +104,9 @@ function getGoogleMaps(apiKey: string): Promise<any> {
       }
     };
   });
+  trackFunction(){
+    
+  }
 }
+
 

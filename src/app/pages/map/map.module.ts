@@ -4,6 +4,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { MapPage } from './map';
 import { MapPageRoutingModule } from './map-routing.module';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
 
 @NgModule({
   imports: [
@@ -13,6 +15,7 @@ import { MapPageRoutingModule } from './map-routing.module';
   ],
   declarations: [
     MapPage,
-  ]
+  ],
+  providers: [Geolocation]
 })
 export class MapModule { }
